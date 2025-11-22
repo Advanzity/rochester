@@ -27,8 +27,7 @@ export default function GoldScrapPage() {
 
   const fetchLiveSpotPrice = async () => {
     try {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const res = await fetch(`${supabaseUrl}/functions/v1/get-gold-spot-price`);
+      const res = await fetch("/api/gold-spot-price");
       const data = await res.json();
       if (data.price) {
         setLiveSpotPrice(data.price);
@@ -43,8 +42,7 @@ export default function GoldScrapPage() {
 
     setUpdating(true);
     try {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const res = await fetch(`${supabaseUrl}/functions/v1/update-scrap-prices`, {
+      const res = await fetch("/api/update-prices", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });

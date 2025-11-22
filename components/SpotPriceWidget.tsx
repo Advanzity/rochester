@@ -16,8 +16,7 @@ export function SpotPriceWidget({ onUpdate }: SpotPriceWidgetProps) {
   const fetchSpotPrice = async () => {
     setLoading(true);
     try {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-      const res = await fetch(`${supabaseUrl}/functions/v1/get-gold-spot-price`);
+      const res = await fetch("/api/gold-spot-price");
       const data = await res.json();
       if (data.price) {
         setSpotPrice(data.price);

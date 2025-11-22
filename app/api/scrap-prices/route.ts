@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase/client";
 
-export async function GET() {
+export const runtime = "edge";
+export const dynamic = "force-dynamic";
+
+export async function GET(request: NextRequest) {
   try {
     const { data, error } = await supabase
       .from("gold_scrap_prices")

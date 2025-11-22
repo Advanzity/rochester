@@ -1,4 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 import { fetchCryptoInstruments } from "@/lib/crypto/fetchers";
 import {
   scrapeFindBullionPrices1ozGold,
@@ -8,7 +11,7 @@ import {
 import { Instrument } from "@/lib/types";
 import { instrumentDefinitions } from "@/lib/instruments";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const [cryptoData, goldData, silverData, platinumData] = await Promise.allSettled([
       fetchCryptoInstruments(),
