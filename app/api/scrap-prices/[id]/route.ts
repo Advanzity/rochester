@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase/client";
 
-export const runtime = "edge";
-export const dynamic = "force-dynamic";
-
 export async function PATCH(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
-  const params = await context.params;
   try {
     const body = await request.json();
     const { spot_price_used, buy_percentage, name, description, is_active } =
@@ -72,9 +68,8 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
-  const params = await context.params;
   try {
     const { error } = await supabase
       .from("gold_scrap_prices")

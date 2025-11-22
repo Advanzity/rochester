@@ -6,62 +6,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Pencil, Save, X, RefreshCw } from "lucide-react";
+import { Pencil, Save, X } from "lucide-react";
 import { GoldScrapPrice } from "@/lib/supabase/types";
 
 export default function GoldScrapPage() {
   const [prices, setPrices] = useState<GoldScrapPrice[]>([]);
   const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editValues, setEditValues] = useState<{
     spot_price_used: string;
     buy_percentage: string;
   }>({ spot_price_used: "", buy_percentage: "" });
-  const [liveSpotPrice, setLiveSpotPrice] = useState<number | null>(null);
 
   useEffect(() => {
     fetchPrices();
-    fetchLiveSpotPrice();
   }, []);
-
-  const fetchLiveSpotPrice = async () => {
-    try {
-      const res = await fetch("/api/gold-spot-price");
-      const data = await res.json();
-      if (data.price) {
-        setLiveSpotPrice(data.price);
-      }
-    } catch (error) {
-      console.error("Failed to fetch live spot price:", error);
-    }
-  };
-
-  const handleUpdateAllPrices = async () => {
-    if (!confirm("Update all prices with current spot price?")) return;
-
-    setUpdating(true);
-    try {
-      const res = await fetch("/api/update-prices", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      const data = await res.json();
-      if (data.success) {
-        await fetchPrices();
-        await fetchLiveSpotPrice();
-        alert(`Successfully updated ${data.updated} price tiers`);
-      } else {
-        alert("Failed to update prices: " + data.error);
-      }
-    } catch (error) {
-      console.error("Error updating prices:", error);
-      alert("Failed to update prices");
-    } finally {
-      setUpdating(false);
-    }
-  };
 
   const fetchPrices = async () => {
     try {
@@ -144,24 +103,6 @@ export default function GoldScrapPage() {
       subtitle="Current buy prices for gold scrap based on karat purity"
     >
       <div className="max-w-6xl mx-auto">
-        <div className="mb-6 flex items-center justify-between bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
-          <div className="flex items-center gap-4">
-            <div>
-              <div className="text-sm text-gray-600">Live Gold Spot Price</div>
-              <div className="text-2xl font-bold text-gray-900">
-                {liveSpotPrice ? formatCurrency(liveSpotPrice) : "Loading..."}
-              </div>
-            </div>
-          </div>
-          <Button
-            onClick={handleUpdateAllPrices}
-            disabled={updating}
-            className="flex items-center gap-2"
-          >
-            <RefreshCw className={`h-4 w-4 ${updating ? "animate-spin" : ""}`} />
-            {updating ? "Updating..." : "Update All Prices"}
-          </Button>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {prices.map((price) => {

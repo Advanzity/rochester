@@ -1,10 +1,7 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { scrapeFindBullionPrices1ozGold } from "@/lib/metals/findBullionPrices";
 
-export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
-
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const snapshot = await scrapeFindBullionPrices1ozGold();
     return NextResponse.json(snapshot, {
